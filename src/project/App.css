@@ -1,19 +1,50 @@
 button {
-  margin:10px  10px 10px 10px  !important;
+  margin: 10px 10px 10px 10px !important;
 }
 
-.MuiDialog-paper{
+.MuiDialog-paper {
   min-width: 400px;
 }
 
-#orderForm .MuiGrid-justify-xs-flex-end{
+#orderForm .MuiGrid-justify-xs-flex-end {
   display: none;
 }
 
-input[type=string] {
+input[type="string"] {
   pointer-events: none;
 }
+.MuiFormLabel-root {
+  font-weight: bold !important;
+  color: rgba(0, 0, 0, 0.7) !important;
+}
 
-body{
+body {
   background-color: #b7b7b721;
+}
+
+.title {
+  font-size: 28px;
+  margin-right: 10px;
+}
+
+.MuiRadio-root.Mui-checked.incorrect {
+  color: red;
+}
+
+.MuiRadio-root.Mui-checked.correct {
+  color: green;
+}
+
+.MuiIconButton-label.correct {
+  color: green;
+}
+
+span.error {
+  font-size: 20px;
+}
+
+span.error.icon::before {
+  content: "\26A0";
+  color: red;
+  font-size: 20px;
 }

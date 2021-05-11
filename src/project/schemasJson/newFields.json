@@ -1,6 +1,6 @@
 {
-    "title": "Ingrese un nuevo campo",
-    "description": "",
+    "title": "Add New Question",
+    "description": "Add a new question to the test",
     "type": "object",
     "required": [
         "fieldType",
@@ -9,43 +9,33 @@
     "properties": {
         "fieldType": {
             "type": "string",
-            "title": "Tipo de campo",
+            "title": "Question Type",
             "enum": [
+                "RadioGroup",
                 "Input",
                 "Select",
-                "CheckBox",
-                "File",
-                "Date"
+                "CheckBox"
             ],
             "enumNames": [
-                "Entrada de texto",
-                "Selector",
-                "CheckBox",
-                "Archivo",
-                "Fecha"
-            ]
+                "RadioGroup",
+                "Input",
+                "Select",
+                "CheckBox"
+            ],
+            "default": "RadioGroup"
         },
         "title": {
             "type": "string",
-            "title": "Título del campo"
+            "title": "Question"
         },
         "description": {
             "type": "string",
-            "title": "Descripción del campo"
-        },
-        "check_id": {
-            "title": "ID automático",
-            "type": "boolean",
-            "default": true,
-            "enum": [
-                true,
-                false
-            ]
+            "title": "Qestion Description"
         },
         "required": {
             "type": "boolean",
-            "title": "¿Es un campo obligatorio?",
-            "default": false
+            "title": "Required?",
+            "default": true
         }
     },
     "dependencies": {
@@ -55,12 +45,12 @@
                     "properties": {
                         "fieldType": {
                             "enum": [
-                                "Select"
+                                "RadioGroup"
                             ]
                         },
                         "options": {
                             "type": "array",
-                            "title": "Campos de tu selector",
+                            "title": "Add Choices",
                             "items": {
                                 "type": "string"
                             }
@@ -69,70 +59,6 @@
                     "required": [
                         "options"
                     ]
-                },
-                {
-                    "properties": {
-                        "fieldType": {
-                            "enum": [
-                                "File"
-                            ]
-                        },
-                        "enableFiles": {
-                            "type": "string",
-                            "title": "Tipo de archivo permitido",
-                            "enum": [
-                                ".pdf",
-                                "image/*"
-                            ],
-                            "enumNames": [
-                                "PDF",
-                                "Imagen"
-                            ]
-                        }
-                    },
-                    "required": [
-                        "enableFiles"
-                    ]
-                },
-                {
-                    "properties": {
-                        "fieldType": {
-                            "enum": [
-                                "Input",
-                                "CheckBox",
-                                "Date"
-                            ]
-                        }
-                    }
-                }
-            ]
-        },
-        "check_id": {
-            "oneOf": [
-                {
-                    "properties": {
-                        "check_id": {
-                            "enum": [
-                                false
-                            ]
-                        },
-                        "id": {
-                            "type": "string",
-                            "title": "Id del campo"
-                        }
-                    },
-                    "required": [
-                        "id"
-                    ]
-                },
-                {
-                    "properties": {
-                        "check_id": {
-                            "enum": [
-                                true
-                            ]
-                        }
-                    }
                 }
             ]
         }

@@ -1,102 +1,101 @@
-import React from 'react';
-import Form from '@rjsf/material-ui';
+import React from "react";
+import Form from "@rjsf/material-ui";
 import WrapperModal from "./WrapperModal";
-import AddRoundedIcon from '@material-ui/icons/AddRounded';
-import SendIcon from '@material-ui/icons/Send';
-export const cleanTextToEnableId = (function () {
-    var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç¿?",
-        to = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc__",
-        mapping = {};
-
-    for (var i = 0, j = from.length; i < j; i++)
-        mapping[from.charAt(i)] = to.charAt(i);
-
-    return function (str) {
-        var ret = [];
-        for (var i = 0, j = str.length; i < j; i++) {
-            var c = str.charAt(i);
-            if (mapping.hasOwnProperty(str.charAt(i)))
-                ret.push(mapping[c]);
-            else
-                ret.push(c);
-        }
-        return ret.join('');
-    }
-
-})();
+import AddRoundedIcon from "@material-ui/icons/AddRounded";
 
 export const handleSubmitModalNewField = (formData, prefix) => {
-    const newProp = { jsonSchema: {}, uiSchema: {} };
+  const newProp = { jsonSchema: {}, uiSchema: {} };
 
-    newProp.jsonSchema.title = formData.title;
+  newProp.jsonSchema.title = formData.title;
+  formData.id = `${prefix}_${Date.now()}_id`;
 
-    if (formData.check_id === true) {
-        formData.id = prefix + formData.title.toLowerCase().replace(/ /g, "_") + '_id';
-        formData.id = cleanTextToEnableId(formData.id)
-    }
-    newProp.jsonSchema.id = formData.id
-    if (typeof formData.description != 'undefined') {
-        newProp.uiSchema[formData.id] = { "ui:help": formData.description }
-    }
+  newProp.jsonSchema.id = formData.id;
+  if (typeof formData.description != "undefined") {
+    newProp.uiSchema[formData.id] = { "ui:help": formData.description };
+  }
 
-    if (formData.required) {
-        newProp.jsonSchema.isRequired = formData.required;
-    }
-    
-    switch (formData.fieldType) {
-        case "Input":
-            newProp.jsonSchema.type = "string";
-            break;
-        case "Select":
-            newProp.jsonSchema.type = "string";
-            newProp.jsonSchema.enum = formData.options;
-            let beforeObject = newProp.uiSchema[formData.id];
-            newProp.uiSchema[formData.id] = { ...beforeObject, ...{ "ui:widget": "select" } }
-            break;
-        case "CheckBox":
-            newProp.jsonSchema.type = "boolean";
-            break;
-        case "Radio buttons":
-            newProp.jsonSchema.type = "boolean";
-            let beforeObjectRadio = newProp.uiSchema[formData.id];
-            newProp.uiSchema[formData.id] = { ...beforeObjectRadio, ...{ "ui:widget": "radio" } }
-            break;
-        case "File":
-            newProp.jsonSchema.type = "string";
-            newProp.jsonSchema.format = "data-url";
-            newProp.uiSchema[formData.id] = { ...newProp.uiSchema[formData.id], ...{ "ui:options": {"accept":  formData.enableFiles } } }
-            break;
-        case "Date":
-            newProp.jsonSchema.type = "string";
-            newProp.jsonSchema.format = "date";
-            break;
+  if (formData.required) {
+    newProp.jsonSchema.isRequired = formData.required;
+  }
 
-        default:
-            break;
-    }
+  switch (formData.fieldType) {
+    case "Input":
+      newProp.jsonSchema.type = "string";
+      break;
+    case "Select":
+      newProp.jsonSchema.type = "string";
+      newProp.jsonSchema.enum = formData.options;
+      let beforeObject = newProp.uiSchema[formData.id];
+      newProp.uiSchema[formData.id] = {
+        ...beforeObject,
+        ...{ "ui:widget": "select" },
+      };
+      break;
 
-    if (formData.sections) {
-        newProp.jsonSchema.sections = formData.sections;
-    }
+    case "RadioGroup":
+      newProp.jsonSchema.type = "string";
+      newProp.jsonSchema.enum = formData.options;
+      newProp.jsonSchema.enumNames = [...formData.options];
 
-    return newProp
-}
+      let _beforeObject = newProp.uiSchema[formData.id];
+      newProp.uiSchema[formData.id] = {
+        ..._beforeObject,
+        ...{ "ui:widget": "radio" },
+      };
+      break;
+    case "CheckBox":
+      newProp.jsonSchema.type = "boolean";
+      break;
+    case "Radio buttons":
+      newProp.jsonSchema.type = "boolean";
+      let beforeObjectRadio = newProp.uiSchema[formData.id];
+      newProp.uiSchema[formData.id] = {
+        ...beforeObjectRadio,
+        ...{ "ui:widget": "radio" },
+      };
+      break;
+    case "Date":
+      newProp.jsonSchema.type = "string";
+      newProp.jsonSchema.format = "date";
+      break;
 
-export default function ModalNewField({ formBuilder, addItemForm, prefix = "" }) {
+    default:
+      break;
+  }
 
-    const onSubmit = ({ formData }, e) => {
-        const newProp = handleSubmitModalNewField(formData, prefix)
-        addItemForm(newProp)
-    };
+  if (formData.sections) {
+    newProp.jsonSchema.sections = formData.sections;
+  }
 
-    return (
-        <WrapperModal txtBtn={<AddRoundedIcon />} txtTitle="" >
-            <Form schema={formBuilder} onSubmit={onSubmit} >
-                <div>
-                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary" type="submit"> <SendIcon/> </button>
-                </div>
-            </Form>
+  return newProp;
+};
 
-        </WrapperModal>
-    );
+export default function ModalNewField({
+  formBuilder,
+  addItemForm,
+  prefix = "",
+  onClose,
+  nextQuestionNumber,
+}) {
+  const onSubmit = ({ formData }, e) => {
+    const newProp = handleSubmitModalNewField(formData, prefix);
+    addItemForm(newProp);
+  };
+
+  return (
+    <WrapperModal txtBtn={<AddRoundedIcon />} txtTitle="" onClose={onClose}>
+      <div>Q{nextQuestionNumber}</div>
+      <Form schema={formBuilder} onSubmit={onSubmit}>
+        <div>
+          <button
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
+            type="submit"
+          >
+            {" "}
+            {"Add"}
+          </button>
+        </div>
+      </Form>
+    </WrapperModal>
+  );
 }

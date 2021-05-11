@@ -1,6 +1,6 @@
 {
-  "title": "Título del Formulario",
-  "description": "Subtítulo",
+  "title": "title",
+  "description": "description",
   "type": "object",
   "properties": {}
 }

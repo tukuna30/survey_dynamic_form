@@ -1,5 +1,5 @@
 {
-    "title": "Nueva Sección",
+    "title": "New Section",
     "description": "",
     "type": "object",
     "required": [
@@ -8,14 +8,14 @@
     "properties": {
         "title": {
             "type": "string",
-            "title": "Título de la sección"
+            "title": "Section title"
         }, 
         "description": {
             "type": "string",
-            "title": "Subtítulo de la sección"
+            "title": "Section description"
         },
         "isArray": {
-            "title": "Permitir que el cliente ingrese N veces la información de esta sección",
+            "title": "Allow the customer to enter the information in this section N times",
             "type": "boolean",
             "default": false,
             "enum": [
@@ -24,7 +24,7 @@
             ]
         },
         "automatic_id": {
-            "title": "ID automático",
+            "title": "ID automatic",
             "type": "boolean",
             "default": true,
             "enum": [
